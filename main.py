@@ -7,10 +7,15 @@ from handlers import Start,Admin,Category
 
 # Инициализируем логгер
 logger = logging.getLogger(__name__)
+# Загружаем конфиг в переменную config
+config: Config = load_config()
 
+# Инициализируем бот и диспетчер
+bot = Bot(token=config.tg_bot.token,
+          parse_mode='HTML')
 
 # Функция конфигурирования и запуска бота
-async def main():
+async def main(bot:Bot):
     # Конфигурируем логирование
     logging.basicConfig(
         level=logging.INFO,
@@ -20,12 +25,7 @@ async def main():
     # Выводим в консоль информацию о начале запуска бота
     logger.info('Starting bot')
 
-    # Загружаем конфиг в переменную config
-    config: Config = load_config()
 
-    # Инициализируем бот и диспетчер
-    bot = Bot(token=config.tg_bot.token,
-              parse_mode='HTML')
     dp = Dispatcher()
 
     # Регистриуем роутеры в диспетчере
@@ -39,4 +39,4 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    asyncio.run(main(bot))

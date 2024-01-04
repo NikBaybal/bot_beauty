@@ -38,7 +38,7 @@ buy_kb=InlineKeyboardMarkup(
     ]
 )
 
-AdminPanel = InlineKeyboardMarkup(
+admin_kb = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(text="👥 Пользователи", callback_data = "users"),
@@ -55,7 +55,7 @@ AdminPanel = InlineKeyboardMarkup(
     ]
 )
 
-back_to_admin = InlineKeyboardMarkup(
+back_to_admin_kb = InlineKeyboardMarkup(
     inline_keyboard=[
         [
             InlineKeyboardButton(text="🔙 Назад", callback_data = "back_to_admin"),

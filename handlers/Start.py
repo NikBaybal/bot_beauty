@@ -1,4 +1,5 @@
-import texts
+import texts.admin
+import texts.start
 from keyboards import *
 from functions import *
 from aiogram import F,Router
@@ -11,7 +12,7 @@ router = Router()
 @router.message(CommandStart())
 async def start(message: Message):
     database.add(message.from_user.id)
-    await message.answer(f'✅ Добро пожаловать, @{message.from_user.username}!\n\n' + texts.start, reply_markup = start_kb)
+    await message.answer(f'✅ Добро пожаловать, @{message.from_user.username}!\n\n' + texts.start.start, reply_markup = start_kb)
 
 @router.message(F.text =='ℹ️ О нас')
 async def about(message: Message):
