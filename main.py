@@ -3,7 +3,7 @@ import logging
 from aiogram import Bot, Dispatcher
 from config import Config, load_config
 from handlers import Start,Admin,Category
-
+from aiogram.fsm.storage.memory import MemoryStorage
 
 # Инициализируем логгер
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ async def main(bot:Bot):
     logger.info('Starting bot')
 
 
-    dp = Dispatcher()
+    dp = Dispatcher(storage=MemoryStorage())
 
     # Регистриуем роутеры в диспетчере
     dp.include_router(Start.router)
