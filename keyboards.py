@@ -50,8 +50,11 @@ admin_kb = InlineKeyboardMarkup(
             InlineKeyboardButton(text="✉️ Рассылка", callback_data = "mailing"),
         ],
         [
-            InlineKeyboardButton(text="❌ Блокировка", callback_data = "block"),
+            InlineKeyboardButton(text="🔒 Блокировка", callback_data = "block"),
         ],
+        [
+            InlineKeyboardButton(text="🔓 Разблокировка", callback_data = "unblock"),
+        ]
     ]
 )
 

@@ -3,13 +3,15 @@ from keyboards import *
 from functions import *
 from aiogram import F,Router
 from aiogram.types import CallbackQuery
-
+import database
 router = Router()
 
 @router.message(F.text =='📝 Прейскурант')
 async def price(message):
-    await message.answer_photo(img_answer('files/info.jpg'), '<b>Выберите интересующую вас услугу</b>', parse_mode ='HTML', reply_markup = catalog_kb)
-
+    if database.check_user_in_block(message.from_user.id)==0:
+        await message.answer_photo(img_answer('files/info.jpg'), '<b>Выберите интересующую вас услугу</b>', parse_mode ='HTML', reply_markup = catalog_kb)
+    else:
+        await message.answer(f'Пользователю @{message.from_user.username} не доступна данная опция')
 @router.callback_query(F.data=='Маникюр')
 async def manikur(callback:CallbackQuery):
     await callback.message.edit_media(img('files/manikur.jpg', texts.category.manikur), reply_markup = buy_kb)

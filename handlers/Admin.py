@@ -9,53 +9,30 @@ from keyboards import *
 import texts.admin
 import database
 
-
 from config import Config, load_config
 router = Router()
 config: Config = load_config()
-
 
 @router.message(Command(commands='admin'))
 async def start(message:Message):
     if message.from_user.id in config.tg_bot.admin_ids:
         await message.answer(texts.admin.start_admin, parse_mode="HTML", reply_markup=admin_kb)
-
+    else:
+        await message.answer("Вы не администратор", parse_mode="HTML", reply_markup=None)
 @router.callback_query(F.data=='statistick')
 async def stat(callback:CallbackQuery):
     await callback.message.edit_text(texts.admin.statistick(int(database.count())), parse_mode="HTML", reply_markup=back_to_admin_kb)
-    await callback.answer()
-
 
 @router.callback_query(F.data == 'users')
 async def users(callback:CallbackQuery):
-    from main import bot
-    t = '''ID, UserName, Name
-    ➖➖➖➖➖➖➖➖➖'''
-    num = 0
-    flag = False
-    await callback.message.delete()
-    await callback.answer()
-    for id in database.get_all()[:][0]:
-        user = await bot.get_chat(id)
-        un = user.username
-        if not un:
-            database.delete(id)
-            continue
-        fn = user.first_name
-        num += 1
-        if len(t) > 3900:
-            if not flag:
-                await callback.message.edit_text(t, parse_mode="HTML")
-                flag = True
-            else:
-                await callback.message.answer(t, parse_mode="HTML")
-            t = ''
-        t += f'\n{num}. <code>{id}</code> @{un} <b>{fn}</b>'
-    await callback.message.answer(t, parse_mode="HTML", reply_markup=back_to_admin_kb)
-
+    t = '''ID, UserName, Name, Block
+    ➖➖➖➖➖➖➖➖➖\n'''
+    t += database.show_users()
+    await callback.message.edit_text(t, parse_mode="HTML", reply_markup=back_to_admin_kb)
 
 class FSMAdmins(StatesGroup):
     ban = State()
+    unban = State()
     mailing_step1 = State()
     mailing_step2 = State()
 @router.message(Command(commands='cancel'))
@@ -71,7 +48,6 @@ async def process_cancel_command_state(message: Message, state: FSMContext):
 async def mailing(call: CallbackQuery,state: FSMContext):
     instructions = "Введите текст сообщения:"
     await call.message.answer(instructions)
-    await call.answer()
     await state.set_state(FSMAdmins.mailing_step1)
 
 @router.message(StateFilter(FSMAdmins.mailing_step1),F.text.isalpha())
@@ -119,25 +95,15 @@ async def warning_not_photo(message: Message):
 async def block(call: CallbackQuery,state: FSMContext):
     await call.message.answer(texts.admin.ban_from_admin_start, parse_mode="HTML",
                               reply_markup=ReplyKeyboardRemove())
-    await call.answer()
     await state.set_state(FSMAdmins.ban)
 
 @router.message(StateFilter(FSMAdmins.ban))
 async def ban1(message, state):
-    from main import bot
     text = message.text
-    if text == '/cancel':
-        await message.answer(texts.admin.ban_from_admin_cancel, reply_markup=admin_kb)
-        await state.finish()
-        return
     if text.isdigit():
         id = int(text)
-        try:
-            await bot.send_message(id, texts.admin.ban)
-        except Exception as e:
-            print(e)
-        database.block(id)
-        await message.answer(texts.admin.ban_from_admin_finaly, parse_mode='HTML', reply_markup=admin_kb)
+        database.add_user_to_block(id)
+        await message.answer(texts.admin.ban_from_admin_finaly+str(database.get_username(id)), parse_mode='HTML', reply_markup=admin_kb)
         await state.finish()
     else:
         await message.answer(texts.admin.ban_from_admin_except, parse_mode='HTML')
@@ -146,3 +112,20 @@ async def ban1(message, state):
 async def back_admin(call: CallbackQuery):
     await call.message.edit_text(texts.admin.start_admin, parse_mode="HTML", reply_markup=admin_kb)
     await call.answer()
+
+@router.callback_query(F.data == 'unblock')
+async def block(call: CallbackQuery,state: FSMContext):
+    await call.message.answer(texts.admin.unban_from_admin_start, parse_mode="HTML",
+                              reply_markup=ReplyKeyboardRemove())
+    await state.set_state(FSMAdmins.unban)
+
+@router.message(StateFilter(FSMAdmins.unban))
+async def unban(message, state):
+    text = message.text
+    if text.isdigit():
+        id = int(text)
+        database.unlock_user(id)
+        await message.answer(texts.admin.unban_from_admin_finaly+str(database.get_username(id)), parse_mode='HTML', reply_markup=admin_kb)
+        await state.finish()
+    else:
+        await message.answer(texts.admin.unban_from_admin_except, parse_mode='HTML')
