@@ -1,11 +1,13 @@
 from aiogram.types import ReplyKeyboardMarkup,InlineKeyboardMarkup, KeyboardButton,InlineKeyboardButton
 
+from utils import free_hours
 
 start_kb=ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text='📝 Прейскурант'),
-            KeyboardButton(text='ℹ️ О нас')
+            KeyboardButton(text='ℹ️ О нас'),
+            KeyboardButton(text='Запись'),
         ],
     ], resize_keyboard=True
 )
@@ -65,3 +67,9 @@ back_to_admin_kb = InlineKeyboardMarkup(
         ],
     ]
 )
+
+def free_hours_kb(date:str)->InlineKeyboardMarkup:
+    kb=InlineKeyboardMarkup()
+    for i in free_hours(date):
+        kb.add(InlineKeyboardButton(text=i,callback_data=i))
+    return kb

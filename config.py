@@ -26,7 +26,7 @@ def load_config(path: str | None = None) -> Config:
     )
 
 
-
+name_json = 'files/my-project-2023-375610-9c983bcdb0e0.json'
 manikur_cost = 1700
 pedikur_cost = 1200
 narast_cost = 3100
