@@ -2,7 +2,7 @@ import texts.admin
 import texts.start
 from keyboards import *
 from functions import *
-from utils import record_user
+import utils
 from aiogram import F,Router
 from aiogram.filters import CommandStart, StateFilter
 from aiogram.types import Message
@@ -31,16 +31,17 @@ async def start_record(message: Message,state:FSMContext):
 
 @router.message(StateFilter(FSMRecord.day))
 async def hours(message: Message, state: FSMContext):
-    await state.update_data(text=message.text)
+    await state.update_data(text=str(message.text))
     date = str(message.text)
     await message.answer(text='Выберите время:',parse_mode ='HTML',reply_markup = free_hours_kb(date).as_markup())
     await state.set_state(FSMRecord.hour)
 @router.callback_query(StateFilter(FSMRecord.hour))
 async def record(callback:CallbackQuery, state: FSMContext):
-    date = str(state.get_data().text)
-    hour_index= callback.message.text
+    date = await state.get_data()
+    hour_index= callback.data
     user_name= callback.message.from_user.username
-    record_user(date,hour_index,user_name)
-    await callback.answer(text='Вы успешно записались!', parse_mode='HTML')
+    utils.record_user(str(date['text']),hour_index,user_name)
+    await state.clear()
+    await callback.message.answer(text='Вы успешно записались!', parse_mode='HTML')
 
 
