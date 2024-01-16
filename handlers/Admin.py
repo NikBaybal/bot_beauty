@@ -69,7 +69,7 @@ async def warning_not_text(message: Message):
 @router.message(StateFilter(FSMAdmins.mailing_step2),F.photo)
 async def process_photo_sent(message: Message,
                              state: FSMContext):
-    from main import bot
+    from bot import bot
     await message.bot.download(file=message.photo[-1].file_id, destination='files/photo.jpg')
     data = await state.get_data()
     subscribers = database.get_id()
