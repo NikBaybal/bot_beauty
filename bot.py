@@ -7,14 +7,11 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import ExceptionTypeFilter
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import Message, ErrorEvent, ReplyKeyboardRemove
-
 from aiogram_dialog import DialogManager, setup_dialogs, StartMode, ShowMode
 from aiogram_dialog.api.exceptions import UnknownIntent
 from bot_dialogs import states
-
 from bot_dialogs.main import main_dialog
-
-from bot_dialogs.switch import switch_dialog
+from bot_dialogs.record import switch_dialog
 from config import Config, load_config
 
 # Инициализируем логгер
@@ -76,19 +73,13 @@ def setup_dp():
 
 
 async def main(bot:Bot):
-    # real main
-    # Конфигурируем логирование
+
     logging.basicConfig(
         level=logging.INFO,
         format='%(filename)s:%(lineno)d #%(levelname)-8s '
                '[%(asctime)s] - %(name)s - %(message)s')
-
-    # Выводим в консоль информацию о начале запуска бота
     logger.info('Starting bot')
-
     dp = setup_dp()
-
-    # Пропускаем накопившиеся апдейты и запускаем polling
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
 
