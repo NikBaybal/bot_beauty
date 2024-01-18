@@ -18,9 +18,9 @@ main_window = Window(
     Const("Step 1. Press Next"),
     Next(),
     MAIN_MENU_BUTTON,
-    state=states.Switch.MAIN,
+    state=states.Record.MAIN,
 )
-input_window = Window(
+date_window = Window(
     HEADER,
     Const("Step 2. Select options"),
     Checkbox(
@@ -37,7 +37,7 @@ input_window = Window(
     ),
     Row(Back(), Next()),
     MAIN_MENU_BUTTON,
-    state=states.Switch.INPUT,
+    state=states.Record.Date,
 )
 
 
@@ -50,7 +50,7 @@ async def data_getter(
     }
 
 
-last_window = Window(
+hour_window = Window(
     HEADER,
     Const("Step 3. Your data:"),
     Case(
@@ -63,11 +63,11 @@ last_window = Window(
     Format("Selected emoji: {emoji}"),
     Back(),
     MAIN_MENU_BUTTON,
-    state=states.Switch.LAST,
+    state=states.Record.Hour,
     getter=data_getter,
 )
 switch_dialog = Dialog(
     main_window,
-    input_window,
-    last_window,
+    date_window,
+    hour_window,
 )
