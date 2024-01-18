@@ -9,7 +9,7 @@ from aiogram_dialog.widgets.markup.reply_keyboard import ReplyKeyboardFactory
 from aiogram_dialog.widgets.text import Const
 from . import states
 
-main_dialog = Dialog(
+main_dialog = Dialog( 
     Window(
         Const("This is aiogram-dialog demo application"),
         Const("Use buttons below to see some options."),
