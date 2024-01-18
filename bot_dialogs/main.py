@@ -11,7 +11,7 @@ from . import states
 
 main_dialog = Dialog(
     Window(
-        Const("Выберите нужное:"),
+        Const("Выберите нужную кнопку:"),
         Start(
             text=Const('📝 Прейскурант'),
             id="price",
