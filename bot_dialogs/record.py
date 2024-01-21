@@ -6,7 +6,7 @@ from aiogram_dialog import (
 from aiogram_dialog.widgets.kbd import Next, Row, Back, Checkbox, Radio
 from aiogram_dialog.widgets.text import Const, Format, Case
 from . import states
-from .common import MAIN_MENU_BUTTON
+from .main import MAIN_MENU_BUTTON
 
 HEADER = Const("Multiple windows in the same dialog can be used "
                "to provide step by step user data input.\n")
