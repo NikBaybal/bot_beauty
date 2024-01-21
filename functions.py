@@ -8,3 +8,5 @@ def img_answer(path:str):
 def img(path:str,text:str)->InputMediaPhoto:
     file_in=FSInputFile(path, "rb")
     return InputMediaPhoto(media=file_in, caption=text, parse_mode = 'HTML')
+
+

@@ -11,7 +11,7 @@ from aiogram_dialog import DialogManager, setup_dialogs, StartMode, ShowMode
 from aiogram_dialog.api.exceptions import UnknownIntent
 from bot_dialogs import states
 from bot_dialogs.main import main_dialog
-from bot_dialogs.record import switch_dialog
+from bot_dialogs.main import about_dialog
 from config import Config, load_config
 
 # Инициализируем логгер
@@ -56,7 +56,7 @@ async def on_unknown_intent(event: ErrorEvent, dialog_manager: DialogManager):
 dialog_router = Router()
 dialog_router.include_routers(
     main_dialog,
-    switch_dialog,
+    about_dialog,
 )
 
 def setup_dp():
