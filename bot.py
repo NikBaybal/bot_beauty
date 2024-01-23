@@ -10,8 +10,8 @@ from aiogram.types import Message, ErrorEvent, ReplyKeyboardRemove
 from aiogram_dialog import DialogManager, setup_dialogs, StartMode, ShowMode
 from aiogram_dialog.api.exceptions import UnknownIntent
 from bot_dialogs import states
-from bot_dialogs.main import main_dialog
-from bot_dialogs.main import about_dialog
+from bot_dialogs.main import main_dialog,about_dialog
+from bot_dialogs.record import record_dialog
 from config import Config, load_config
 
 # Инициализируем логгер
@@ -57,6 +57,7 @@ dialog_router = Router()
 dialog_router.include_routers(
     main_dialog,
     about_dialog,
+    record_dialog,
 )
 
 def setup_dp():

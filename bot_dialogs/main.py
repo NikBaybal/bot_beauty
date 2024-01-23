@@ -1,8 +1,5 @@
-from aiogram_dialog import (
-    Dialog, Window, LaunchMode,DialogManager,
-)
-from aiogram_dialog.widgets.kbd import (
-    Start,)
+from aiogram_dialog import Dialog, Window, LaunchMode
+from aiogram_dialog.widgets.kbd import Start
 from aiogram_dialog.widgets.media import StaticMedia
 from aiogram_dialog.widgets.text import Const,Format
 from . import states
@@ -18,9 +15,9 @@ main_dialog = Dialog(
     Window(
         Const("Выберите нужную кнопку:"),
         Start(
-            text=Const('📝 Прейскурант'),
+            text=Const('📝 Запись'),
             id="price",
-            state=states.Price.MAIN,
+            state=states.Record.MAIN,
         ),
         Start(
             text=Const('ℹ️ О нас'),
