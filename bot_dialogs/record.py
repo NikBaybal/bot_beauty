@@ -48,7 +48,7 @@ async def hours_selection(callback: CallbackQuery, widget: Select,
     hour=item_id
     user_name = callback.message.from_user.username
     utils.record_user(date, hour, user_name)
-    await callback.message.answer(text=f'Вы успешно записались!'+'\n'f'Выбранная дата: {date}'+'\n'+f'Выбранное время: {hour}', parse_mode='HTML')
+    await callback.message.answer(text=f'Вы успешно записались!!!!'+'\n'f'Выбранная дата: {date}'+'\n'+f'Выбранное время: {hour}', parse_mode='HTML')
 
 
 async def get_hours( dialog_manager: DialogManager,**_kwargs):
