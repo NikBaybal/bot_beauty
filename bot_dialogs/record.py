@@ -1,12 +1,13 @@
 from typing import Any, Dict
 from aiogram_dialog import (Dialog, Window, DialogManager)
-from aiogram_dialog.widgets.kbd import Next, Row, Back, Checkbox, Radio
+from aiogram_dialog.widgets.kbd import Next, Column, Back, Select
 from aiogram_dialog.widgets.text import Const, Format, Case
 from . import states
 from .main import MAIN_MENU_BUTTON
 from aiogram_dialog.widgets.input import TextInput, ManagedTextInput
 import datetime
-from aiogram.types import Message
+from aiogram.types import Message,CallbackQuery
+import utils
 
 def date_check(text: str) -> str:
     if datetime.date.fromisoformat(text):
@@ -41,20 +42,38 @@ main_window = Window(
     ),
     state=states.Record.MAIN,
 )
+async def hours_selection(callback: CallbackQuery, widget: Select,
+                             dialog_manager: DialogManager, item_id: str):
+    date=dialog_manager.dialog_data.get('user_input')
+    hour=item_id
+    user_name = callback.message.from_user.username
+    utils.record_user(date, hour, user_name)
+    await callback.message.answer(text=f'Выбранная дата: {date}'+'\n'+f'Выбранное время: {hour}', parse_mode='HTML')
 
 
-async def data_getter(**_kwargs):
+async def get_hours( dialog_manager: DialogManager,**_kwargs):
+    date=dialog_manager.dialog_data.get('user_input')
+    hours=utils.free_hours(date)
     return {
-         "something": "data from Window1 getter",
+         "hours": hours,
     }
 
 
 hour_window = Window(
-    Format("Выбранная дата:  {dialog_data[user_input]}"),
+    Const(text='Свободные часы:'),
+    Column(
+        Select(
+            Format('{item}'),
+            id='hour',
+            item_id_getter=lambda x: x,
+            items='hours',
+            on_click=hours_selection
+         ),
+    ),
     Back(),
     MAIN_MENU_BUTTON,
     state=states.Record.Hour,
-    getter=data_getter,
+    getter=get_hours,
 )
 
 record_dialog = Dialog(

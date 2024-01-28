@@ -1,7 +1,5 @@
 import asyncio
 import logging
-import os.path
-
 from aiogram import Bot, Dispatcher, F, Router
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import ExceptionTypeFilter
@@ -87,9 +85,11 @@ async def main(bot:Bot):
 
 if __name__ == '__main__':
     asyncio.run(main(bot))
+    
 
 
-"""
+
+'''
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
@@ -132,4 +132,4 @@ async def main(bot:Bot):
 
 if __name__ == '__main__':
     asyncio.run(main(bot))
-"""
+'''
